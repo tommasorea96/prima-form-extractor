@@ -1,0 +1,5 @@
+anthropic          # Claude API — extraction engine
+fastapi            # REST API layer
+uvicorn            # ASGI server for FastAPI
+python-dotenv      # load .env file for API keys
+playwright         # form scraper tool only
