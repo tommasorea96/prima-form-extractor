@@ -1,0 +1,310 @@
+[
+  {
+    "step": 1,
+    "field_id": "purchase_timeline",
+    "label": "¿Cuándo compraste/comprarás el coche?",
+    "type": "enum",
+    "format": null,
+    "required": true,
+    "options": ["ya_tengo", "nuevo", "usado_concesionario", "usado_particular"],
+    "conditional_on": null,
+    "extraction_hints": [
+      "ya tengo el coche",
+      "tengo coche",
+      "coche nuevo",
+      "concesionario",
+      "particular",
+      "segunda mano"
+    ]
+  },
+  {
+    "step": 1,
+    "field_id": "license_plate",
+    "label": "Matrícula",
+    "type": "string",
+    "format": null,
+    "required": false,
+    "options": null,
+    "conditional_on": null,
+    "extraction_hints": [
+      "matrícula",
+      "matricula",
+      "la placa"
+    ]
+  },
+  {
+    "step": 1,
+    "field_id": "registration_date",
+    "label": "Fecha de matriculación",
+    "type": "date",
+    "format": "YYYY-MM-DD",
+    "required": false,
+    "options": null,
+    "conditional_on": null,
+    "extraction_hints": [
+      "año del coche",
+      "matriculado en",
+      "año de fabricación"
+    ]
+  },
+  {
+    "step": 1,
+    "field_id": "brand",
+    "label": "Marca",
+    "type": "string",
+    "format": null,
+    "required": false,
+    "options": null,
+    "conditional_on": null,
+    "extraction_hints": [
+      "marca",
+      "es un",
+      "tengo un"
+    ]
+  },
+  {
+    "step": 1,
+    "field_id": "model",
+    "label": "Modelo",
+    "type": "string",
+    "format": null,
+    "required": false,
+    "options": null,
+    "conditional_on": null,
+    "extraction_hints": [
+      "modelo",
+      "el modelo es"
+    ]
+  },
+  {
+    "step": 2,
+    "field_id": "first_name",
+    "label": "Nombre",
+    "type": "string",
+    "format": null,
+    "required": true,
+    "options": null,
+    "conditional_on": null,
+    "extraction_hints": [
+      "me llamo",
+      "mi nombre es",
+      "soy",
+      "nombre"
+    ]
+  },
+  {
+    "step": 2,
+    "field_id": "last_name",
+    "label": "Apellidos",
+    "type": "string",
+    "format": null,
+    "required": true,
+    "options": null,
+    "conditional_on": null,
+    "extraction_hints": [
+      "apellido",
+      "me llamo",
+      "mi nombre completo es"
+    ]
+  },
+  {
+    "step": 2,
+    "field_id": "birth_date",
+    "label": "Fecha de nacimiento",
+    "type": "date",
+    "format": "YYYY-MM-DD",
+    "required": true,
+    "options": null,
+    "conditional_on": null,
+    "extraction_hints": [
+      "tengo X años",
+      "nacido el",
+      "nací el",
+      "fecha de nacimiento",
+      "años de edad"
+    ]
+  },
+  {
+    "step": 2,
+    "field_id": "id_number",
+    "label": "DNI / NIE",
+    "type": "string",
+    "format": null,
+    "required": true,
+    "options": null,
+    "conditional_on": null,
+    "extraction_hints": [
+      "DNI",
+      "NIE",
+      "documento de identidad",
+      "mi dni es",
+      "mi nie es"
+    ]
+  },
+  {
+    "step": 2,
+    "field_id": "residence_postal_code",
+    "label": "Código postal de residencia",
+    "type": "string",
+    "format": null,
+    "required": true,
+    "options": null,
+    "conditional_on": null,
+    "extraction_hints": [
+      "código postal",
+      "vivo en",
+      "resido en",
+      "CP"
+    ]
+  },
+  {
+    "step": 2,
+    "field_id": "years_with_license",
+    "label": "Años con carnet de conducir",
+    "type": "integer",
+    "format": null,
+    "required": true,
+    "options": null,
+    "conditional_on": null,
+    "extraction_hints": [
+      "llevo X años conduciendo",
+      "tengo el carnet desde",
+      "años de carnet",
+      "saqué el carnet en"
+    ]
+  },
+  {
+    "step": 2,
+    "field_id": "penalty_points",
+    "label": "Puntos en el carnet",
+    "type": "integer",
+    "format": null,
+    "required": true,
+    "options": null,
+    "conditional_on": null,
+    "extraction_hints": [
+      "puntos",
+      "carnet de puntos",
+      "tengo X puntos"
+    ]
+  },
+  {
+    "step": 2,
+    "field_id": "claims_history",
+    "label": "Siniestros en los últimos años",
+    "type": "integer",
+    "format": null,
+    "required": true,
+    "options": null,
+    "conditional_on": null,
+    "extraction_hints": [
+      "siniestros",
+      "accidentes",
+      "nunca he tenido un siniestro",
+      "he tenido X accidentes"
+    ]
+  },
+  {
+    "step": 3,
+    "field_id": "had_previous_insurance",
+    "label": "¿Tenías seguro anteriormente?",
+    "type": "boolean",
+    "format": null,
+    "required": true,
+    "options": null,
+    "conditional_on": {"field_id": "purchase_timeline", "value": "ya_tengo"},
+    "extraction_hints": [
+      "tenía seguro",
+      "estaba asegurado",
+      "seguro anterior",
+      "no tenía seguro",
+      "sin seguro previo"
+    ]
+  },
+  {
+    "step": 3,
+    "field_id": "previous_insurer",
+    "label": "Compañía aseguradora anterior",
+    "type": "string",
+    "format": null,
+    "required": false,
+    "options": null,
+    "conditional_on": {"field_id": "had_previous_insurance", "value": true},
+    "extraction_hints": [
+      "compañía anterior",
+      "estaba con",
+      "asegurado con",
+      "mi seguro era de",
+      "Mapfre",
+      "Allianz",
+      "AXA",
+      "Línea Directa",
+      "Mutua Madrileña"
+    ]
+  },
+  {
+    "step": 3,
+    "field_id": "years_without_claims",
+    "label": "Años sin siniestros",
+    "type": "integer",
+    "format": null,
+    "required": false,
+    "options": null,
+    "conditional_on": {"field_id": "had_previous_insurance", "value": true},
+    "extraction_hints": [
+      "años sin accidentes",
+      "años sin siniestros",
+      "llevo X años sin",
+      "bonus"
+    ]
+  },
+  {
+    "step": 4,
+    "field_id": "coverage_type",
+    "label": "Tipo de cobertura",
+    "type": "enum",
+    "format": null,
+    "required": true,
+    "options": ["terceros_basico", "terceros_ampliado", "todo_riesgo_con_franquicia"],
+    "conditional_on": null,
+    "extraction_hints": [
+      "terceros",
+      "todo riesgo",
+      "cobertura básica",
+      "cobertura ampliada",
+      "franquicia"
+    ]
+  },
+  {
+    "step": 5,
+    "field_id": "phone",
+    "label": "Teléfono de contacto",
+    "type": "string",
+    "format": null,
+    "required": true,
+    "options": null,
+    "conditional_on": null,
+    "extraction_hints": [
+      "teléfono",
+      "móvil",
+      "número de teléfono",
+      "puedes llamarme al"
+    ]
+  },
+  {
+    "step": 5,
+    "field_id": "email",
+    "label": "Email de contacto",
+    "type": "string",
+    "format": "email",
+    "required": true,
+    "options": null,
+    "conditional_on": null,
+    "extraction_hints": [
+      "correo",
+      "email",
+      "mail",
+      "dirección de correo"
+    ]
+  }
+]
