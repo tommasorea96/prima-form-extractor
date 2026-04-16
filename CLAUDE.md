@@ -20,10 +20,15 @@ Prima integrates this tool via API into their existing systems.
 prima-form-extractor/
 ├── src/
 │   ├── __init__.py
-│   └── extractor.py       ← core NLP extraction engine (Claude API)
+│   ├── schema.json        ← canonical field schema (19 fields, types, conditionals, Spanish hints)
+│   ├── extractor.py       ← core NLP extraction engine (Claude API, with prompt caching)
+│   ├── api.py             ← FastAPI REST API (POST /extract)
+│   └── main.py            ← uvicorn entrypoint
 ├── tools/
-│   └── form-scraper/      ← separate Playwright tool to scrape Prima's form fields
+│   └── form-scraper/
+│       └── scraper.py     ← one-time Playwright scraper to discover Prima's form fields
 ├── CLAUDE.md
+├── .env.example           ← ANTHROPIC_API_KEY template (.env is gitignored)
 ├── .gitignore
 └── requirements.txt
 ```
@@ -86,23 +91,56 @@ Some fields only exist if other fields have certain values:
 - `previous_insurer` and `years_without_claims` → only if `had_previous_insurance = true`
 - More conditional rules to be discovered via form-scraper
 
+## API contract
+
+**Request:** `POST /extract`
+```json
+{
+  "messages": [
+    {"role": "user", "text": "Me llamo Mario Rossi, tengo 35 años..."},
+    {"role": "assistant", "text": "¿Cuál es tu código postal?"},
+    {"role": "user", "text": "28001"}
+  ]
+}
+```
+
+**Response:**
+```json
+{
+  "extracted": {
+    "first_name": "Mario",
+    "last_name": "Rossi",
+    "birth_date": "1991-01-01",
+    "residence_postal_code": "28001",
+    "coverage_type": null
+  },
+  "missing": ["coverage_type", "license_plate", "phone", "email", ...]
+}
+```
+
+- `extracted`: all fields, `null` if not found, `"N/A"` if conditional and not applicable
+- `missing`: required fields that are still `null`
+- No auth for now
+
 ## Tech stack
 
 - Python 3.10+
-- Claude API (Anthropic) for NLP extraction
-- FastAPI for the REST API layer (to be added)
+- Claude API (`claude-opus-4-6`) for NLP extraction, with prompt caching on the schema
+- FastAPI for the REST API layer
 - Playwright (for form-scraper tool only)
+- Run: `uvicorn src.main:app --reload` (from project root)
 
 ## Status
 
-- [ ] Form scraper built and run → full field list extracted
-- [ ] Field schema defined (JSON)
-- [ ] Extraction engine built (Claude API)
-- [ ] REST API wrapper (FastAPI)
-- [ ] Tested end-to-end with sample Spanish inputs
+- [x] Form scraper built (`tools/form-scraper/scraper.py`) — not yet run against Prima's site
+- [x] Field schema defined (`src/schema.json`) — 19 fields, based on known data; to be updated after scraper runs
+- [x] Extraction engine built and tested (`src/extractor.py`)
+- [x] REST API wrapper built (`src/api.py`)
+- [ ] Form scraper actually run → full field list verified
+- [ ] Tested end-to-end with real Prima form data
 
 ## Next steps
 
-1. Build `tools/form-scraper` using Playwright to get the full field list
-2. Define the complete field schema as a JSON file
-3. Build the extraction engine using Claude API
+1. Run `python tools/form-scraper/scraper.py` against https://calcular.helloprima.es/coche
+2. Review output and update `src/schema.json` with any missing/corrected fields
+3. Start API with `uvicorn src.main:app --reload` and test with real Spanish inputs
