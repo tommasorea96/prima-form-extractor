@@ -132,15 +132,19 @@ Some fields only exist if other fields have certain values:
 
 ## Status
 
-- [x] Form scraper built (`tools/form-scraper/scraper.py`) — not yet run against Prima's site
-- [x] Field schema defined (`src/schema.json`) — 19 fields, based on known data; to be updated after scraper runs
+- [x] Form scraper built (`tools/form-scraper/scraper.py`) — scraper approach abandoned (see note below)
+- [x] Field schema defined (`src/schema.json`) — 19 fields, based on known data; needs update from form screenshots
 - [x] Extraction engine built and tested (`src/extractor.py`)
 - [x] REST API wrapper built (`src/api.py`)
-- [ ] Form scraper actually run → full field list verified
+- [ ] Schema verified and updated from real Prima form screenshots
 - [ ] Tested end-to-end with real Prima form data
+
+## Note on schema discovery
+
+The Playwright scraper (`tools/form-scraper/scraper.py`) was built but abandoned — Prima's site likely blocks automated browsers. **New approach:** manually navigate the form, take screenshots of every step (full path, all fields filled in), and share them with Claude to update `src/schema.json`. Some fields are conditional (e.g. additional drivers section only appears if user declares additional drivers) — screenshots should cover the most complete path possible.
 
 ## Next steps
 
-1. Run `python tools/form-scraper/scraper.py` against https://calcular.helloprima.es/coche
-2. Review output and update `src/schema.json` with any missing/corrected fields
+1. Share screenshots of Prima's full quote form (https://calcular.helloprima.es/coche) with Claude
+2. Claude updates `src/schema.json` based on screenshots
 3. Start API with `uvicorn src.main:app --reload` and test with real Spanish inputs
